@@ -1,6 +1,5 @@
 package com.ezequiel.paymentsapi.rest;
 
-import com.ezequiel.paymentsapi.entities.Customer;
 import com.ezequiel.paymentsapi.entities.Payment;
 import com.ezequiel.paymentsapi.entities.Product;
 import com.ezequiel.paymentsapi.repositories.PaymentRepository;
@@ -14,12 +13,11 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.ezequiel.paymentsapi.rest.PaymentRestTestFixture.aMockedPaymentByDateCustomerNameAndProducts;
 import static io.restassured.RestAssured.when;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
@@ -39,17 +37,17 @@ public class PaymentRestTest {
 
     @BeforeEach
     public void setUp() {
-        payments.add(createPayment("2021-06-07 11:30", "Customer 1",
+        payments.add(aMockedPaymentByDateCustomerNameAndProducts("2021-06-07 11:30", "Customer 1",
                 Arrays.asList(
                         new Product("Mocked Product 1", "Mocked Path 1", BigDecimal.valueOf(100.0)),
                         new Product("Mocked Product 2", "Mocked Path 2", BigDecimal.valueOf(50.0))
                 )));
-        payments.add(createPayment("2021-06-06 08:30", "Customer 1",
+        payments.add(aMockedPaymentByDateCustomerNameAndProducts("2021-06-06 08:30", "Customer 1",
                 Arrays.asList(
                         new Product("Mocked Product 1", "Mocked Path 1", BigDecimal.valueOf(100.0)),
                         new Product("Mocked Product 2", "Mocked Path 2", BigDecimal.valueOf(50.0))
                 )));
-        payments.add(createPayment("2021-06-05 09:30", "Customer 2",
+        payments.add(aMockedPaymentByDateCustomerNameAndProducts("2021-06-05 09:30", "Customer 2",
                 Arrays.asList(
                         new Product("Mocked Product 3", "Mocked Path 1", BigDecimal.valueOf(60.0)),
                         new Product("Mocked Product 4", "Mocked Path 2", BigDecimal.valueOf(30.0))
@@ -124,13 +122,4 @@ public class PaymentRestTest {
                 .statusCode(is(200))
                 .body(notNullValue());
     }
-
-    private Payment createPayment(String date, String customerName, List<Product> products) {
-        Payment payment = new Payment();
-        payment.setDate(LocalDateTime.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        payment.setCustomer(new Customer(customerName));
-        payment.getProducts().addAll(products);
-        return payment;
-    }
-
 }
