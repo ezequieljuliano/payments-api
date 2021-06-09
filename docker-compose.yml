@@ -1,0 +1,14 @@
+version: '3'
+services:
+  payments-app:
+    image: ezequiel/payments-api-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - payments-database
+  payments-database:
+    image: postgres:10.4
+    environment:
+      - POSTGRES_DB=payments
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
