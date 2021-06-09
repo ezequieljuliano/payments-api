@@ -14,12 +14,12 @@ import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static com.ezequiel.paymentsapi.rest.controllers.PaymentControllerTestFixture.aMockedPaymentByDateAndCustomerName;
 import static org.mockito.BDDMockito.given;
 
 public class PaymentControllerTest {
@@ -57,9 +57,9 @@ public class PaymentControllerTest {
     @Test
     public void shouldReturnSortedPaymentsByDate() {
         List<Payment> payments = new ArrayList<>();
-        payments.add(createMockedPayment("2021-06-05 11:30", "Customer 1"));
-        payments.add(createMockedPayment("2021-06-06 08:30", "Customer 2"));
-        payments.add(createMockedPayment("2021-06-07 19:30", "Customer 3"));
+        payments.add(aMockedPaymentByDateAndCustomerName("2021-06-05 11:30", "Customer 1"));
+        payments.add(aMockedPaymentByDateAndCustomerName("2021-06-06 08:30", "Customer 2"));
+        payments.add(aMockedPaymentByDateAndCustomerName("2021-06-07 19:30", "Customer 3"));
 
         given(sortedPaymentsService.getSortedPaymentsByDate()).willReturn(payments);
 
@@ -185,13 +185,4 @@ public class PaymentControllerTest {
         Assertions.assertEquals(2021, monthlyBilling.getBody().get(1).getYear());
         Assertions.assertEquals(BigDecimal.valueOf(100.0), monthlyBilling.getBody().get(1).getAmount());
     }
-
-    private Payment createMockedPayment(String date, String customerName) {
-        Payment payment = new Payment();
-        payment.setDate(LocalDateTime.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        payment.setCustomer(new Customer(customerName));
-        payment.getProducts().add(new Product("Mocked Product", "Mocked Path", BigDecimal.valueOf(100.0)));
-        return payment;
-    }
-
 }

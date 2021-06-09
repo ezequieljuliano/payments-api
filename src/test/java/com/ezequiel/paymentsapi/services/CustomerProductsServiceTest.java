@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.*;
 
+import static com.ezequiel.paymentsapi.services.CustomerProductsServiceTestFixture.aMockedPaymentByCustomerNameAndProducts;
 import static org.mockito.BDDMockito.given;
 
 public class CustomerProductsServiceTest {
@@ -29,11 +29,11 @@ public class CustomerProductsServiceTest {
     @Test
     public void shouldReturnProductsByCustomer() {
         List<Payment> payments = new ArrayList<>();
-        payments.add(createMockedPayment("Customer 1", Arrays.asList(
+        payments.add(aMockedPaymentByCustomerNameAndProducts("Customer 1", Arrays.asList(
                 new Product("Mocked Product 1", "Mocked Path 1", BigDecimal.valueOf(100.0)),
                 new Product("Mocked Product 2", "Mocked Path 2", BigDecimal.valueOf(200.0))
         )));
-        payments.add(createMockedPayment("Customer 2", Arrays.asList(
+        payments.add(aMockedPaymentByCustomerNameAndProducts("Customer 2", Arrays.asList(
                 new Product("Mocked Product 3", "Mocked Path 3", BigDecimal.valueOf(100.0)),
                 new Product("Mocked Product 4", "Mocked Path 4", BigDecimal.valueOf(200.0))
         )));
@@ -70,13 +70,4 @@ public class CustomerProductsServiceTest {
         Assertions.assertEquals("Mocked Path 4", customer2Billing.get().getValue().get(1).getFile());
         Assertions.assertEquals(BigDecimal.valueOf(200.0), customer2Billing.get().getValue().get(1).getPrice());
     }
-
-    private Payment createMockedPayment(String customerName, List<Product> products) {
-        Payment payment = new Payment();
-        payment.setDate(LocalDateTime.now());
-        payment.setCustomer(new Customer(customerName));
-        payment.getProducts().addAll(products);
-        return payment;
-    }
-
 }

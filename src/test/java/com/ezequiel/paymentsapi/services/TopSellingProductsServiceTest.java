@@ -1,6 +1,5 @@
 package com.ezequiel.paymentsapi.services;
 
-import com.ezequiel.paymentsapi.entities.Customer;
 import com.ezequiel.paymentsapi.entities.Payment;
 import com.ezequiel.paymentsapi.entities.Product;
 import com.ezequiel.paymentsapi.repositories.PaymentRepository;
@@ -10,9 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.*;
 
+import static com.ezequiel.paymentsapi.services.TopSellingProductsServiceTestFixture.aMockedPaymentByCustomerNameAndProducts;
 import static org.mockito.BDDMockito.given;
 
 public class TopSellingProductsServiceTest {
@@ -29,11 +28,11 @@ public class TopSellingProductsServiceTest {
     @Test
     public void shouldReturnTopSellingProductsNamesAndQuantities() {
         List<Payment> payments = new ArrayList<>();
-        payments.add(createMockedPayment("Customer 1", Arrays.asList(
+        payments.add(aMockedPaymentByCustomerNameAndProducts("Customer 1", Arrays.asList(
                 new Product("Mocked Product 1", "Mocked Path 1", BigDecimal.valueOf(300.0)),
                 new Product("Mocked Product 2", "Mocked Path 2", BigDecimal.valueOf(200.0))
         )));
-        payments.add(createMockedPayment("Customer 2", Arrays.asList(
+        payments.add(aMockedPaymentByCustomerNameAndProducts("Customer 2", Arrays.asList(
                 new Product("Mocked Product 1", "Mocked Path 1", BigDecimal.valueOf(300.0)),
                 new Product("Mocked Product 3", "Mocked Path 3", BigDecimal.valueOf(200.0))
         )));
@@ -64,14 +63,6 @@ public class TopSellingProductsServiceTest {
                 .findAny();
         Assertions.assertTrue(product3Billing.isPresent());
         Assertions.assertEquals(1L, product2Billing.get().getValue());
-    }
-
-    private Payment createMockedPayment(String customerName, List<Product> products) {
-        Payment payment = new Payment();
-        payment.setDate(LocalDateTime.now());
-        payment.setCustomer(new Customer(customerName));
-        payment.getProducts().addAll(products);
-        return payment;
     }
 
 }

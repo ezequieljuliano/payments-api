@@ -1,8 +1,6 @@
 package com.ezequiel.paymentsapi.services;
 
-import com.ezequiel.paymentsapi.entities.Customer;
 import com.ezequiel.paymentsapi.entities.Payment;
-import com.ezequiel.paymentsapi.entities.Product;
 import com.ezequiel.paymentsapi.repositories.PaymentRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,12 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static com.ezequiel.paymentsapi.services.MonthlyBillingServiceTestFixture.aMockedPaymentByDateCustomerNameAndValues;
 import static org.mockito.BDDMockito.given;
 
 public class MonthlyBillingServiceTest {
@@ -32,8 +29,8 @@ public class MonthlyBillingServiceTest {
     @Test
     public void shouldReturnMonthlyBilling() {
         List<Payment> payments = new ArrayList<>();
-        payments.add(createMockedPayment("2021-06-07 11:30", "Customer 1", Arrays.asList(100.0, 200.0)));
-        payments.add(createMockedPayment("2021-05-05 08:30", "Customer 2", Arrays.asList(300.0, 400.0)));
+        payments.add(aMockedPaymentByDateCustomerNameAndValues("2021-06-07 11:30", "Customer 1", Arrays.asList(100.0, 200.0)));
+        payments.add(aMockedPaymentByDateCustomerNameAndValues("2021-05-05 08:30", "Customer 2", Arrays.asList(300.0, 400.0)));
 
         given(paymentRepository.findAll()).willReturn(payments);
 
@@ -54,14 +51,6 @@ public class MonthlyBillingServiceTest {
                 .findAny();
         Assertions.assertTrue(mayBilling.isPresent());
         Assertions.assertEquals(BigDecimal.valueOf(700.0), mayBilling.get().getValue());
-    }
-
-    private Payment createMockedPayment(String date, String customerName, List<Double> values) {
-        Payment payment = new Payment();
-        payment.setDate(LocalDateTime.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        payment.setCustomer(new Customer(customerName));
-        values.forEach(value -> payment.getProducts().add(new Product("Mocked Product", "Mocked Path", BigDecimal.valueOf(value))));
-        return payment;
     }
 
 }
