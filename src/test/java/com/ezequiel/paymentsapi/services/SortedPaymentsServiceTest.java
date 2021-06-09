@@ -13,6 +13,8 @@ import java.util.List;
 
 import static com.ezequiel.paymentsapi.services.SortedPaymentsServiceTestFixture.createMockedPaymentByDateAndCustomerName;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 public class SortedPaymentsServiceTest {
 
@@ -40,6 +42,8 @@ public class SortedPaymentsServiceTest {
         Assertions.assertEquals("2021-06-05 19:30", sortedPaymentsByDate.get(0).getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         Assertions.assertEquals("2021-06-06 08:30", sortedPaymentsByDate.get(1).getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         Assertions.assertEquals("2021-06-07 11:30", sortedPaymentsByDate.get(2).getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        verify(paymentRepository).findAll();
+        verifyNoMoreInteractions(paymentRepository);
     }
 
 }

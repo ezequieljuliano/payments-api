@@ -13,6 +13,8 @@ import java.util.*;
 
 import static com.ezequiel.paymentsapi.services.TopSellingProductsServiceTestFixture.aMockedPaymentByCustomerNameAndProducts;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 public class TopSellingProductsServiceTest {
 
@@ -63,6 +65,8 @@ public class TopSellingProductsServiceTest {
                 .findAny();
         Assertions.assertTrue(product3Billing.isPresent());
         Assertions.assertEquals(1L, product2Billing.get().getValue());
+        verify(paymentRepository).findAll();
+        verifyNoMoreInteractions(paymentRepository);
     }
 
 }

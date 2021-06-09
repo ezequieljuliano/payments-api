@@ -13,6 +13,8 @@ import java.util.*;
 
 import static com.ezequiel.paymentsapi.services.CustomerBillingServiceTestFixture.aMockedPaymentByNameAndValues;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 public class CustomerBillingServiceTest {
 
@@ -50,5 +52,7 @@ public class CustomerBillingServiceTest {
                 .findAny();
         Assertions.assertTrue(customer2Billing.isPresent());
         Assertions.assertEquals(BigDecimal.valueOf(700.0), customer2Billing.get().getValue());
+        verify(paymentRepository).findAll();
+        verifyNoMoreInteractions(paymentRepository);
     }
 }
