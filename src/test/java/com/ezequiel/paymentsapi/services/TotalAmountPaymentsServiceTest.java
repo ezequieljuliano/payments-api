@@ -16,6 +16,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 public class TotalAmountPaymentsServiceTest {
 
@@ -39,6 +41,8 @@ public class TotalAmountPaymentsServiceTest {
         BigDecimal totalPaymentsAmount = subject.getTotalPaymentsAmount();
         Assertions.assertNotNull(totalPaymentsAmount);
         Assertions.assertEquals(BigDecimal.valueOf(1000.0), totalPaymentsAmount);
+        verify(paymentRepository).findAll();
+        verifyNoMoreInteractions(paymentRepository);
     }
 
     private Payment createMockedPayment(List<Double> values) {

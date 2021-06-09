@@ -21,6 +21,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 public class PaymentControllerTest {
 
@@ -70,6 +72,8 @@ public class PaymentControllerTest {
         Assertions.assertEquals("2021-06-05 11:30", sortedPaymentsByDate.getBody().get(0).getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         Assertions.assertEquals("2021-06-06 08:30", sortedPaymentsByDate.getBody().get(1).getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         Assertions.assertEquals("2021-06-07 19:30", sortedPaymentsByDate.getBody().get(2).getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        verify(sortedPaymentsService).getSortedPaymentsByDate();
+        verifyNoMoreInteractions(sortedPaymentsService);
     }
 
     @Test
@@ -80,6 +84,8 @@ public class PaymentControllerTest {
         Assertions.assertNotNull(totalPaymentsAmount);
         Assertions.assertNotNull(totalPaymentsAmount.getBody());
         Assertions.assertEquals(BigDecimal.valueOf(500.0), totalPaymentsAmount.getBody().getTotalAmount());
+        verify(totalAmountPaymentsService).getTotalPaymentsAmount();
+        verifyNoMoreInteractions(totalAmountPaymentsService);
     }
 
     @Test
@@ -98,6 +104,8 @@ public class PaymentControllerTest {
         Assertions.assertEquals(5L, topSellingProductsNamesAndQuantities.getBody().get(0).getQuantity());
         Assertions.assertEquals("Product 2", topSellingProductsNamesAndQuantities.getBody().get(1).getProduct());
         Assertions.assertEquals(3L, topSellingProductsNamesAndQuantities.getBody().get(1).getQuantity());
+        verify(topSellingProductsService).getTopSellingProductsNamesAndQuantities();
+        verifyNoMoreInteractions(topSellingProductsService);
     }
 
     @Test
@@ -116,6 +124,8 @@ public class PaymentControllerTest {
         Assertions.assertEquals(BigDecimal.valueOf(150.0), topBillingProductsNamesAndQuantities.getBody().get(0).getAmount());
         Assertions.assertEquals("Product 1", topBillingProductsNamesAndQuantities.getBody().get(1).getProduct());
         Assertions.assertEquals(BigDecimal.valueOf(100.0), topBillingProductsNamesAndQuantities.getBody().get(1).getAmount());
+        verify(topBillingProductsService).getTopBillingProductsNamesAndAmount();
+        verifyNoMoreInteractions(topBillingProductsService);
     }
 
     @Test
@@ -144,6 +154,8 @@ public class PaymentControllerTest {
         Assertions.assertEquals(2, productsByCustomer.getBody().get(1).getProducts().size());
         Assertions.assertEquals("Product 1", productsByCustomer.getBody().get(1).getProducts().get(0).getName());
         Assertions.assertEquals("Product 2", productsByCustomer.getBody().get(1).getProducts().get(1).getName());
+        verify(customerProductsService).getProductsByCustomer();
+        verifyNoMoreInteractions(customerProductsService);
     }
 
     @Test
@@ -163,6 +175,8 @@ public class PaymentControllerTest {
         Assertions.assertEquals(BigDecimal.valueOf(400.0), customersBilling.getBody().get(0).getAmount());
         Assertions.assertEquals("Customer 1", customersBilling.getBody().get(1).getCustomer());
         Assertions.assertEquals(BigDecimal.valueOf(200.0), customersBilling.getBody().get(1).getAmount());
+        verify(customerBillingService).getCustomersBilling();
+        verifyNoMoreInteractions(customerBillingService);
     }
 
     @Test
@@ -184,6 +198,8 @@ public class PaymentControllerTest {
         Assertions.assertEquals(5, monthlyBilling.getBody().get(1).getMonth());
         Assertions.assertEquals(2021, monthlyBilling.getBody().get(1).getYear());
         Assertions.assertEquals(BigDecimal.valueOf(100.0), monthlyBilling.getBody().get(1).getAmount());
+        verify(monthlyBillingService).getMonthlyBilling();
+        verifyNoMoreInteractions(monthlyBillingService);
     }
 
     private Payment createMockedPayment(String date, String customerName) {

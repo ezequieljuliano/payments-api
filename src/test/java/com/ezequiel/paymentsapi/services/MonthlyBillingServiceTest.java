@@ -17,6 +17,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 public class MonthlyBillingServiceTest {
 
@@ -54,6 +56,8 @@ public class MonthlyBillingServiceTest {
                 .findAny();
         Assertions.assertTrue(mayBilling.isPresent());
         Assertions.assertEquals(BigDecimal.valueOf(700.0), mayBilling.get().getValue());
+        verify(paymentRepository).findAll();
+        verifyNoMoreInteractions(paymentRepository);
     }
 
     private Payment createMockedPayment(String date, String customerName, List<Double> values) {
