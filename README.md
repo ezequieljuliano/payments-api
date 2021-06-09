@@ -155,7 +155,7 @@ The purpose of this API is to test some features available from Java 8 and apply
 * [Docker](https://www.docker.com/) - Operating system-level virtualization.
 * [H2 Database](https://www.h2database.com/html/main.html) - In memory database for integration tests
 * [Mockito](https://site.mockito.org/) - Tasty mocking framework for unit tests
-* [REST Assured](https://rest-assured.io/ - Testing and validating REST services
+* [REST Assured](https://rest-assured.io/) - Testing and validating REST services
 
 ## Getting Started
 To get a local copy up and running follow these simple steps.
