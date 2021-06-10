@@ -16,4 +16,5 @@ public class CustomerProductsServiceTestFixture {
         payment.getProducts().addAll(products);
         return payment;
     }
+
 }

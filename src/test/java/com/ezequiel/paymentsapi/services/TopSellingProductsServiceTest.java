@@ -65,6 +65,7 @@ public class TopSellingProductsServiceTest {
                 .findAny();
         Assertions.assertTrue(product3Billing.isPresent());
         Assertions.assertEquals(1L, product2Billing.get().getValue());
+
         verify(paymentRepository).findAll();
         verifyNoMoreInteractions(paymentRepository);
     }

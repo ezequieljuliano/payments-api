@@ -53,6 +53,7 @@ public class MonthlyBillingServiceTest {
                 .findAny();
         Assertions.assertTrue(mayBilling.isPresent());
         Assertions.assertEquals(BigDecimal.valueOf(700.0), mayBilling.get().getValue());
+
         verify(paymentRepository).findAll();
         verifyNoMoreInteractions(paymentRepository);
     }

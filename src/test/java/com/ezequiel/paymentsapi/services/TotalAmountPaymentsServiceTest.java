@@ -39,7 +39,9 @@ public class TotalAmountPaymentsServiceTest {
         BigDecimal totalPaymentsAmount = subject.getTotalPaymentsAmount();
         Assertions.assertNotNull(totalPaymentsAmount);
         Assertions.assertEquals(BigDecimal.valueOf(1000.0), totalPaymentsAmount);
+
         verify(paymentRepository).findAll();
         verifyNoMoreInteractions(paymentRepository);
     }
+
 }

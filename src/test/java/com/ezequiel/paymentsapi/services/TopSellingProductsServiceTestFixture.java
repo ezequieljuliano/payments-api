@@ -7,7 +7,7 @@ import com.ezequiel.paymentsapi.entities.Product;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public  class TopSellingProductsServiceTestFixture {
+public class TopSellingProductsServiceTestFixture {
 
     public static Payment aMockedPaymentByCustomerNameAndProducts(String customerName, List<Product> products) {
         Payment payment = new Payment();
@@ -16,4 +16,5 @@ public  class TopSellingProductsServiceTestFixture {
         payment.getProducts().addAll(products);
         return payment;
     }
+
 }

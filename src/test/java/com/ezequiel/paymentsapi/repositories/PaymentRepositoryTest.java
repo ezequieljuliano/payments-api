@@ -38,4 +38,5 @@ public class PaymentRepositoryTest {
         Assertions.assertTrue(findAllPayments.stream().anyMatch(payment -> payment.getCustomer().getName().equals("Customer 1")));
         Assertions.assertTrue(findAllPayments.stream().anyMatch(payment -> payment.getCustomer().getName().equals("Customer 2")));
     }
+
 }

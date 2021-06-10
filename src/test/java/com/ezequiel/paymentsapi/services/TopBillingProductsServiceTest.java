@@ -65,7 +65,9 @@ public class TopBillingProductsServiceTest {
                 .findAny();
         Assertions.assertTrue(product3Billing.isPresent());
         Assertions.assertEquals(BigDecimal.valueOf(200.0), product2Billing.get().getValue());
+
         verify(paymentRepository).findAll();
         verifyNoMoreInteractions(paymentRepository);
     }
+
 }

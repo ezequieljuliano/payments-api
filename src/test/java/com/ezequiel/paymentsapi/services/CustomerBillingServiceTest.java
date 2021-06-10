@@ -52,7 +52,9 @@ public class CustomerBillingServiceTest {
                 .findAny();
         Assertions.assertTrue(customer2Billing.isPresent());
         Assertions.assertEquals(BigDecimal.valueOf(700.0), customer2Billing.get().getValue());
+
         verify(paymentRepository).findAll();
         verifyNoMoreInteractions(paymentRepository);
     }
+
 }

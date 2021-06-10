@@ -19,4 +19,5 @@ public class PaymentRestTestFixture {
         payment.getProducts().addAll(products);
         return payment;
     }
+
 }

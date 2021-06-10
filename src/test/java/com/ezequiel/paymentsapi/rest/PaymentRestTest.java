@@ -122,4 +122,5 @@ public class PaymentRestTest {
                 .statusCode(is(200))
                 .body(notNullValue());
     }
+
 }

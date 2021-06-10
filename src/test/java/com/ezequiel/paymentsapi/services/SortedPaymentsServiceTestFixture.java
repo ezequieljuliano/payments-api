@@ -17,4 +17,5 @@ public class SortedPaymentsServiceTestFixture {
         payment.getProducts().add(new Product("Mocked Product", "Mocked Path", BigDecimal.valueOf(100.0)));
         return payment;
     }
+
 }

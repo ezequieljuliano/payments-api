@@ -71,7 +71,9 @@ public class CustomerProductsServiceTest {
         Assertions.assertEquals("Mocked Product 4", customer2Billing.get().getValue().get(1).getName());
         Assertions.assertEquals("Mocked Path 4", customer2Billing.get().getValue().get(1).getFile());
         Assertions.assertEquals(BigDecimal.valueOf(200.0), customer2Billing.get().getValue().get(1).getPrice());
+
         verify(paymentRepository).findAll();
         verifyNoMoreInteractions(paymentRepository);
     }
+
 }

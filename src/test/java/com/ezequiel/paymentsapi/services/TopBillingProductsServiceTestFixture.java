@@ -16,4 +16,5 @@ public class TopBillingProductsServiceTestFixture {
         payment.getProducts().addAll(products);
         return payment;
     }
+
 }

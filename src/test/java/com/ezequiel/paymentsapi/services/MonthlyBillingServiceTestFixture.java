@@ -18,4 +18,5 @@ public class MonthlyBillingServiceTestFixture {
         values.forEach(value -> payment.getProducts().add(new Product("Mocked Product", "Mocked Path", BigDecimal.valueOf(value))));
         return payment;
     }
+
 }
