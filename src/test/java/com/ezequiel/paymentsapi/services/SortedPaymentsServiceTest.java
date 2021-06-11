@@ -7,11 +7,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ezequiel.paymentsapi.services.SortedPaymentsServiceTestFixture.createMockedPaymentByDateAndCustomerName;
+import static com.ezequiel.paymentsapi.services.SortedPaymentsServiceTestFixture.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -30,18 +29,18 @@ public class SortedPaymentsServiceTest {
     @Test
     public void shouldReturnSortedPaymentsByDate() {
         List<Payment> payments = new ArrayList<>();
-        payments.add(createMockedPaymentByDateAndCustomerName("2021-06-07 11:30", "Customer 1"));
-        payments.add(createMockedPaymentByDateAndCustomerName("2021-06-06 08:30", "Customer 2"));
-        payments.add(createMockedPaymentByDateAndCustomerName("2021-06-05 19:30", "Customer 3"));
+        payments.add(newMockedPaymentByDate(DATE_TIME_3));
+        payments.add(newMockedPaymentByDate(DATE_TIME_1));
+        payments.add(newMockedPaymentByDate(DATE_TIME_2));
 
         given(paymentRepository.findAll()).willReturn(payments);
 
         List<Payment> sortedPaymentsByDate = subject.getSortedPaymentsByDate();
         Assertions.assertNotNull(sortedPaymentsByDate);
-        Assertions.assertEquals(3, sortedPaymentsByDate.size());
-        Assertions.assertEquals("2021-06-05 19:30", sortedPaymentsByDate.get(0).getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        Assertions.assertEquals("2021-06-06 08:30", sortedPaymentsByDate.get(1).getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        Assertions.assertEquals("2021-06-07 11:30", sortedPaymentsByDate.get(2).getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        Assertions.assertEquals(AMOUNT_OF_PAYMENTS, sortedPaymentsByDate.size());
+        Assertions.assertEquals(DATE_TIME_1, sortedPaymentsByDate.get(0).getDate().format(DATE_TIME_FORMATTER));
+        Assertions.assertEquals(DATE_TIME_2, sortedPaymentsByDate.get(1).getDate().format(DATE_TIME_FORMATTER));
+        Assertions.assertEquals(DATE_TIME_3, sortedPaymentsByDate.get(2).getDate().format(DATE_TIME_FORMATTER));
 
         verify(paymentRepository).findAll();
         verifyNoMoreInteractions(paymentRepository);

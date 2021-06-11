@@ -11,7 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ezequiel.paymentsapi.repositories.PaymentRepositoryTestFixture.aMockedPaymentByCustomerName;
+import static com.ezequiel.paymentsapi.repositories.PaymentRepositoryTestFixture.*;
 
 @DataJpaTest
 @ActiveProfiles("test")
@@ -28,15 +28,15 @@ public class PaymentRepositoryTest {
     @Test
     public void shouldSaveAndFindAllPayments() {
         List<Payment> payments = new ArrayList<>();
-        payments.add(aMockedPaymentByCustomerName("Customer 1"));
-        payments.add(aMockedPaymentByCustomerName("Customer 2"));
+        payments.add(newMockedPaymentByCustomerName(CUSTOMER_NAME_1));
+        payments.add(newMockedPaymentByCustomerName(CUSTOMER_NAME_2));
         subject.saveAll(payments);
 
         List<Payment> findAllPayments = subject.findAll();
         Assertions.assertNotNull(findAllPayments);
-        Assertions.assertEquals(2, findAllPayments.size());
-        Assertions.assertTrue(findAllPayments.stream().anyMatch(payment -> payment.getCustomer().getName().equals("Customer 1")));
-        Assertions.assertTrue(findAllPayments.stream().anyMatch(payment -> payment.getCustomer().getName().equals("Customer 2")));
+        Assertions.assertEquals(AMOUNT_OF_PAYMENTS, findAllPayments.size());
+        Assertions.assertTrue(findAllPayments.stream().anyMatch(payment -> payment.getCustomer().getName().equals(CUSTOMER_NAME_1)));
+        Assertions.assertTrue(findAllPayments.stream().anyMatch(payment -> payment.getCustomer().getName().equals(CUSTOMER_NAME_2)));
     }
 
 }

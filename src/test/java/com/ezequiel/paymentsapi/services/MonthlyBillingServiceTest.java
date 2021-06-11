@@ -10,9 +10,12 @@ import org.mockito.Mockito;
 import java.math.BigDecimal;
 import java.time.Month;
 import java.time.YearMonth;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-import static com.ezequiel.paymentsapi.services.MonthlyBillingServiceTestFixture.aMockedPaymentByDateCustomerNameAndValues;
+import static com.ezequiel.paymentsapi.services.MonthlyBillingServiceTestFixture.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -31,28 +34,28 @@ public class MonthlyBillingServiceTest {
     @Test
     public void shouldReturnMonthlyBilling() {
         List<Payment> payments = new ArrayList<>();
-        payments.add(aMockedPaymentByDateCustomerNameAndValues("2021-06-07 11:30", "Customer 1", Arrays.asList(100.0, 200.0)));
-        payments.add(aMockedPaymentByDateCustomerNameAndValues("2021-05-05 08:30", "Customer 2", Arrays.asList(300.0, 400.0)));
+        payments.add(newMockedPaymentByDateAndValues(DATE_TIME_2, PAYMENT_2_VALUES));
+        payments.add(newMockedPaymentByDateAndValues(DATE_TIME_1, PAYMENT_1_VALUES));
 
         given(paymentRepository.findAll()).willReturn(payments);
 
         Map<YearMonth, BigDecimal> monthlyBilling = subject.getMonthlyBilling();
         Assertions.assertNotNull(monthlyBilling);
-        Assertions.assertEquals(2, monthlyBilling.size());
+        Assertions.assertEquals(MONTHLY_BILLING_AMOUNT, monthlyBilling.size());
 
         Optional<Map.Entry<YearMonth, BigDecimal>> juneBilling = monthlyBilling.entrySet()
                 .stream()
                 .filter(entry -> entry.getKey().getMonth() == Month.JUNE)
                 .findAny();
         Assertions.assertTrue(juneBilling.isPresent());
-        Assertions.assertEquals(BigDecimal.valueOf(300.0), juneBilling.get().getValue());
+        Assertions.assertEquals(TOTAL_JUNE, juneBilling.get().getValue());
 
         Optional<Map.Entry<YearMonth, BigDecimal>> mayBilling = monthlyBilling.entrySet()
                 .stream()
                 .filter(entry -> entry.getKey().getMonth() == Month.MAY)
                 .findAny();
         Assertions.assertTrue(mayBilling.isPresent());
-        Assertions.assertEquals(BigDecimal.valueOf(700.0), mayBilling.get().getValue());
+        Assertions.assertEquals(TOTAL_MAY, mayBilling.get().getValue());
 
         verify(paymentRepository).findAll();
         verifyNoMoreInteractions(paymentRepository);

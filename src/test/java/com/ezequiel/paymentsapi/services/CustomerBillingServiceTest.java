@@ -9,9 +9,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-import static com.ezequiel.paymentsapi.services.CustomerBillingServiceTestFixture.aMockedPaymentByNameAndValues;
+import static com.ezequiel.paymentsapi.services.CustomerBillingServiceTestFixture.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -30,28 +33,28 @@ public class CustomerBillingServiceTest {
     @Test
     public void shouldReturnCustomersBilling() {
         List<Payment> payments = new ArrayList<>();
-        payments.add(aMockedPaymentByNameAndValues("Customer 1", Arrays.asList(100.0, 200.0)));
-        payments.add(aMockedPaymentByNameAndValues("Customer 2", Arrays.asList(300.0, 400.0)));
+        payments.add(newMockedPaymentByCustomerNameAndValues(CUSTOMER_NAME_1, PAYMENT_1_VALUES));
+        payments.add(newMockedPaymentByCustomerNameAndValues(CUSTOMER_NAME_2, PAYMENT_2_VALUES));
 
         given(paymentRepository.findAll()).willReturn(payments);
 
         Map<Customer, BigDecimal> customersBilling = subject.getCustomersBilling();
         Assertions.assertNotNull(customersBilling);
-        Assertions.assertEquals(2, customersBilling.size());
+        Assertions.assertEquals(CUSTOMERS_BILLING_AMOUNT, customersBilling.size());
 
         Optional<Map.Entry<Customer, BigDecimal>> customer1Billing = customersBilling.entrySet()
                 .stream()
-                .filter(entry -> entry.getKey().getName().equals("Customer 1"))
+                .filter(entry -> entry.getKey().getName().equals(CUSTOMER_NAME_1))
                 .findAny();
         Assertions.assertTrue(customer1Billing.isPresent());
-        Assertions.assertEquals(BigDecimal.valueOf(300.0), customer1Billing.get().getValue());
+        Assertions.assertEquals(TOTAL_CUSTOMER_1, customer1Billing.get().getValue());
 
         Optional<Map.Entry<Customer, BigDecimal>> customer2Billing = customersBilling.entrySet()
                 .stream()
-                .filter(entry -> entry.getKey().getName().equals("Customer 2"))
+                .filter(entry -> entry.getKey().getName().equals(CUSTOMER_NAME_2))
                 .findAny();
         Assertions.assertTrue(customer2Billing.isPresent());
-        Assertions.assertEquals(BigDecimal.valueOf(700.0), customer2Billing.get().getValue());
+        Assertions.assertEquals(TOTAL_CUSTOMER_2, customer2Billing.get().getValue());
 
         verify(paymentRepository).findAll();
         verifyNoMoreInteractions(paymentRepository);
